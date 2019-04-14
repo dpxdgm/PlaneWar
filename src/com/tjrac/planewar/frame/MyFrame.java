@@ -13,7 +13,7 @@ public class MyFrame extends JFrame{
 	private JLabel helpJLabel=null;
 	private JLabel titleJLabel=null;
 
-	private static final Image image = Toolkit.getDefaultToolkit().getImage("resource/bg1.jpg");
+	private static Image image = Toolkit.getDefaultToolkit().getImage("resource/bg1.jpg");
 	private static final JComponent canvas = new JComponent() {
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
@@ -31,9 +31,35 @@ public class MyFrame extends JFrame{
 		
 		Container c=getContentPane();
 		canvas.setBounds(0,0,400,700);
+		initializationAll();
+		
+		c.add(returnbtn);
+		c.add(helpJLabel);
+		c.add(startbtn);
+		c.add(exitbtn);
+		c.add(helpbtn);
+		c.add(titleJLabel);
+		c.add(canvas);
+		setVisible(true);
+	}
+	public static void main(String[] args) {
+		new MyFrame();
+	}
+	
+	private void initializationAll() {
 //		初始化按钮
 		startbtn=new MyButton("开始游戏");
 		startbtn.setBounds(120, 300, 160, 40);
+		startbtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				startbtn.setVisible(false);
+				exitbtn.setVisible(false);
+				helpbtn.setVisible(false);
+				titleJLabel.setVisible(false);
+				image=Toolkit.getDefaultToolkit().getImage("resource/bg.jpg");
+			}
+		});
 		exitbtn=new MyButton("退出游戏");
 		exitbtn.setBounds(120, 350, 160, 40);
 		exitbtn.addActionListener(new ActionListener() {
@@ -80,17 +106,5 @@ public class MyFrame extends JFrame{
 		helpJLabel.setOpaque(false);
 		helpJLabel.setForeground(Color.white);
 		helpJLabel.setVisible(false);
-		
-		c.add(returnbtn);
-		c.add(helpJLabel);
-		c.add(startbtn);
-		c.add(exitbtn);
-		c.add(helpbtn);
-		c.add(titleJLabel);
-		c.add(canvas);
-		setVisible(true);
-	}
-	public static void main(String[] args) {
-		new MyFrame();
 	}
 }
