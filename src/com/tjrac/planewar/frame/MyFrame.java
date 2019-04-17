@@ -1,9 +1,13 @@
 package com.tjrac.planewar.frame;
 
 import javax.swing.*;
+
+import com.tjrac.planewar.pojo.Hero;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class MyFrame extends JFrame{
 	private MyButton startbtn=null;
@@ -12,7 +16,10 @@ public class MyFrame extends JFrame{
 	private MyButton returnbtn=null;
 	private JLabel helpJLabel=null;
 	private JLabel titleJLabel=null;
-
+	
+//	定义角色
+	private static Hero hero=new Hero();
+//   画背景
 	private static Image image = Toolkit.getDefaultToolkit().getImage("resource/bg1.jpg");
 	private static final JComponent canvas = new JComponent() {
 		protected void paintComponent(Graphics g) {
@@ -31,8 +38,8 @@ public class MyFrame extends JFrame{
 		
 		Container c=getContentPane();
 		canvas.setBounds(0,0,400,700);
-		initializationAll();
-		
+		initializationAll(this);
+		c.add(hero);
 		c.add(returnbtn);
 		c.add(helpJLabel);
 		c.add(startbtn);
@@ -46,7 +53,7 @@ public class MyFrame extends JFrame{
 		new MyFrame();
 	}
 	
-	private void initializationAll() {
+	private void initializationAll(MyFrame frame) {
 //		初始化按钮
 		startbtn=new MyButton("开始游戏");
 		startbtn.setBounds(120, 300, 160, 40);
@@ -58,6 +65,7 @@ public class MyFrame extends JFrame{
 				helpbtn.setVisible(false);
 				titleJLabel.setVisible(false);
 				image=Toolkit.getDefaultToolkit().getImage("resource/bg.jpg");
+				frame.setContentPane(new MyPanel());
 			}
 		});
 		exitbtn=new MyButton("退出游戏");
@@ -106,5 +114,26 @@ public class MyFrame extends JFrame{
 		helpJLabel.setOpaque(false);
 		helpJLabel.setForeground(Color.white);
 		helpJLabel.setVisible(false);
+	}
+
+	public static class MyPanel extends JPanel{
+		@Override
+		protected void paintComponent(Graphics g) {
+			// TODO Auto-generated method stub
+			super.paintComponent(g);
+			drawbackImg(g);
+			drawHeroImage(g);
+		}
+		private void drawbackImg(Graphics g) {
+			Graphics2D g2d=(Graphics2D)g.create();
+			g2d.drawImage(image,0,0,400,700,this);
+			g2d.dispose();
+		}
+		private void drawHeroImage(Graphics g) {
+			// TODO Auto-generated method stub
+			Graphics2D g2d=(Graphics2D)g.create();
+			g2d.drawImage(hero.getImage(), hero.getX(),hero.getY(),hero.getWidth(),hero.getHeight(),this);
+			g2d.dispose();
+		}
 	}
 }
