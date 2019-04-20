@@ -1,8 +1,10 @@
 package com.tjrac.planewar.pojo;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -11,7 +13,7 @@ import com.tjrac.planewar.frame.MyFrame;
 
 public class Bullet extends FlyObject{
 	
-    private int speed=3;
+    private int speed=5;
 
     private static MyFrame myFrame;
     private boolean isAlife=true;
@@ -41,18 +43,6 @@ public class Bullet extends FlyObject{
 			return ;
 		}
 	}
-	//////
-	public void draw(Graphics g,int herox,int heroy){
-		if (isAlife==true) {
-			g.drawImage(this.image, herox, heroy,this.width,this.height, null);
-			movetheobject(); 
-			return;
-		}
-		else {
-			myFrame.bulletlist.remove(this);
-			return ;
-		}
-	}
 	public void movetheobject() {
 		y-=speed; 
 	    //if(y < 0) y = 0;
@@ -63,10 +53,34 @@ public class Bullet extends FlyObject{
 //		this.setY(getY()-speed);	
 //	}
 
+	public void hitplanes(List<EnemyPlane> enemylist) {
+		for (EnemyPlane enemyPlane : enemylist) {
+			hitplane(enemyPlane,2);
+		}
+	}
 	@Override
-	public boolean moveOut() {
-		
-		 return getY()<getHeight();
+	public Rectangle getRect() {
+		return new Rectangle(x,y,width,height);
+	}
+//									type 1的时候表示hero 2的时候表示敌机
+	public void hitplane(FlyObject plane, int type) {
+		Rectangle shape=plane.getRect();
+		switch (type) {
+		case 1:
+			Hero hero=(Hero)plane;
+			if (this.isAlife&&getRect().intersects(shape)) {
+				hero.delLife();
+			}
+			break;
+		case 2:
+			EnemyPlane ePlane=(EnemyPlane)plane;
+			if (this.isAlife&&getRect().intersects(shape)) {
+				MyFrame.hero.myscore+=ePlane.getScore();
+				ePlane.setAlife(false);
+				this.isAlife=false;
+			}
+			break;
+		}
 	}
 	
 

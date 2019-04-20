@@ -15,8 +15,8 @@ public class CreateEnemyThread extends Thread{
 	public void run() {
 		while (true) {
 			if (myFrame.gameState==1) {
-				if (myFrame.enemylist.size()<20||myFrame.enemylist==null) {
-					EnemyPlane enemyPlane = new EnemyPlane(random.nextInt(350),-random.nextInt(150),myFrame);
+				if (myFrame.enemylist.size()<50||myFrame.enemylist==null) {
+					EnemyPlane enemyPlane = new EnemyPlane(random.nextInt(300),-random.nextInt(150),myFrame);
 					myFrame.enemylist.add(enemyPlane);
 				}
 			}
