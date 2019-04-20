@@ -59,8 +59,8 @@ public abstract class FlyObject extends JPanel{
 	//移动对象
 //	public abstract void movetheobject();
 	
-//	判断是否超过游戏边界
-	public abstract boolean moveOut();
+////	判断是否超过游戏边界
+//	public abstract boolean moveOut();
 	
 	
 }

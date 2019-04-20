@@ -8,11 +8,11 @@ public class Enemy extends FlyObject{
 //		
 //	}
 
-	@Override
-	public boolean moveOut() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+//	@Override
+//	public boolean moveOut() {
+//		// TODO Auto-generated method stub
+//		return false;
+//	}
 
 	public void movetheobject() {
 		// TODO Auto-generated method stub

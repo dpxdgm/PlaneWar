@@ -188,10 +188,6 @@ public class Hero extends FlyObject{
 		cBulletThread.start();
 	}
 
-	@Override
-	public boolean moveOut() {
-		return false;
-	}
     public boolean hit(FlyObject object){
         int x1=object.getX()-this.getWidth()/2;
         int x2=object.getX()+this.getWidth()/2+object.getWidth();

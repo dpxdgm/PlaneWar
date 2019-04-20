@@ -183,8 +183,8 @@ public class MyFrame extends JFrame{
 			if (bulletlist!=null||bulletlist.size()>0) {
 				for (int i = 0; i < bulletlist.size(); i++) {
 					Bullet bullet=bulletlist.get(i);
-					//bullet.draw(g,hero.getX(),hero.getY());
 					bullet.draw(g);
+					bullet.hitplanes(enemylist);
 				}
 			}
 		}
