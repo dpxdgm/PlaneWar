@@ -16,8 +16,8 @@ public class Bullet extends FlyObject{
     private static MyFrame myFrame;
     private boolean isAlife=true;
 	public Bullet(int x,int y){
-		
-	    System.out.println("ok");
+		////
+	    //System.out.println("ok");
 	    try {
 			this.image=ImageIO.read(MyFrame.class.getResource("../resource/m8.png"));
 		} catch (IOException e) {

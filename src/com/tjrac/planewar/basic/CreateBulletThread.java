@@ -21,11 +21,16 @@ public class CreateBulletThread extends Thread{
 	public void run() {
 		while (true) {
 			if (myFrame.gameState==1) {
-				if (myFrame.bulletlist.size()<20||myFrame.bulletlist==null) {
-					///
-					Bullet bullet = new Bullet(myFrame.hero.x,myFrame.hero.y);
-					myFrame.bulletlist.add(bullet);
+				if (myFrame.hero.isfire==true) {
+					if (myFrame.bulletlist.size()<20||myFrame.bulletlist==null) {
+						///
+						System.out.println("创造了颗子弹"+myFrame.bulletlist.size());
+						Bullet bullet = new Bullet(myFrame.hero.x,myFrame.hero.y);
+						myFrame.bulletlist.add(bullet);
+					}
 				}
+				
+				
 			}
 			try {
 				Thread.sleep(400);
