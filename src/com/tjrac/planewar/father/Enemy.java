@@ -14,4 +14,9 @@ public class Enemy extends FlyObject{
 		return false;
 	}
 
+	public void movetheobject() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

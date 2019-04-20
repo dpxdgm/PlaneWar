@@ -13,7 +13,6 @@ public class MyJPanel extends JPanel{
 	class PaintTread extends Thread{
 		public void run() {
 			while(true){
-				System.out.println("进行重画");
 				repaint();
 				try {
 					Thread.sleep(40);

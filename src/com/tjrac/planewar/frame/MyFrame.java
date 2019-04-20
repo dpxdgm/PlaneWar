@@ -1,7 +1,10 @@
+    
 package com.tjrac.planewar.frame;
 
 import javax.swing.*;
 
+import com.tjrac.planewar.basic.CreateEnemyThread;
+import com.tjrac.planewar.pojo.EnemyPlane;
 import com.tjrac.planewar.pojo.Hero;
 
 import java.awt.*;
@@ -11,6 +14,10 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MyFrame extends JFrame{
 	static MyFrame myFrame = new MyFrame();
@@ -23,10 +30,14 @@ public class MyFrame extends JFrame{
 	private static JLabel titleJLabel=null;
 	
 //	                      1开始时
-	private static int gameState=0;
+	public static int gameState=0;
 	private static MyPanel myPanel=new MyPanel();;
 //	创建英雄
 	private static Hero hero=new Hero(myFrame);
+//	创建敌机
+	public static List<EnemyPlane> enemylist=new LinkedList<>();
+	private static EnemyPlane ePlane=new EnemyPlane(100,20,myFrame);;
+	
 //   加载图片
 	private static Image image = Toolkit.getDefaultToolkit().getImage("resource/bg1.jpg");
 	private static final JComponent canvas = new JComponent() {
@@ -38,22 +49,22 @@ public class MyFrame extends JFrame{
 		}
 	};
 	public MyFrame() {
-		
+		setTitle("PlaneWar");
+		setSize(400, 700);
+		setResizable(false);
+		setLayout(null);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	public static void main(String[] args) {
-		myFrame.setTitle("PlaneWar");
-		myFrame.setSize(400, 700);
-		myFrame.setResizable(false);
-		myFrame.setLayout(null);
-		myFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
 		Thread starThread=new Thread(new Runnable() {
 			@Override
 			public void run() {
 				while(true) {
 					System.out.println("进入线程");
 					if (gameState==1) {
+						myFrame.getContentPane().removeAll();
 						myFrame.setContentPane(myPanel);
+						myPanel.startEnemyThread();
 						System.out.println("开始游戏");
 						break;
 					}
@@ -142,8 +153,11 @@ public class MyFrame extends JFrame{
 	public static class MyPanel extends MyJPanel{
 		public MyPanel() {
 			addKeyListener(myFrame.new KeyMonitor());
-			setFocusable(true);
+			setFocusable(true);		
 		}
+		public void startEnemyThread(){
+			new CreateEnemyThread(myFrame).start();
+		};
 		@Override
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
@@ -153,7 +167,14 @@ public class MyFrame extends JFrame{
 		public void paint(Graphics g) {
 			super.paint(g);
 			hero.draw(g);
-			System.out.println(hero.y);
+//			ePlane.draw(g);
+			System.out.println(ePlane.y);
+			if (enemylist!=null||enemylist.size()>0) {
+				for (int i = 0; i < enemylist.size(); i++) {
+					EnemyPlane ePlane=enemylist.get(i);
+					ePlane.draw(g);
+				}
+			}
 		}
 		private void drawbackImg(Graphics g) {
 			Graphics2D g2d=(Graphics2D)g.create();

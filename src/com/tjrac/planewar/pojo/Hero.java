@@ -174,7 +174,7 @@ public class Hero extends FlyObject{
 	        break;  
 	    }
 		if(x < 0) x = 0;  
-    	if(y < 30) y = 30;  
+    	if(y < 0) y = 0;  
     	if(x + width > 400) x = 400 - width;  
     	if(y + height > 700) y = 700 - height;
 		
