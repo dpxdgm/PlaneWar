@@ -10,6 +10,7 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
+import com.tjrac.planewar.basic.CreateBulletThread;
 import com.tjrac.planewar.basic.Direction;
 import com.tjrac.planewar.father.FlyObject;
 import com.tjrac.planewar.frame.MyFrame;
@@ -25,8 +26,10 @@ public class Hero extends FlyObject{
 	private boolean bL,bU,bR,bD;
 	private int speed=10;
 	
-	private MyFrame gf;
+	private CreateBulletThread cBulletThread=null;
+	private MyFrame myFrame;
 	public Hero(MyFrame myFrame){
+		this.myFrame=myFrame;
 		try {
 			image=ImageIO.read(MyFrame.class.getResource("../resource/plane15.png"));
 		} catch (IOException e) {
@@ -40,6 +43,7 @@ public class Hero extends FlyObject{
 		index=0;
 		this.setX(200-this.getWidth()/2);
         this.setY(700-this.getHeight()*2);
+        cBulletThread=new CreateBulletThread(myFrame);
 	}
 	
     public int getFire(){
@@ -181,7 +185,7 @@ public class Hero extends FlyObject{
 	}
 
 	private void fire() {
-		
+		cBulletThread.start();
 	}
 
 	@Override
