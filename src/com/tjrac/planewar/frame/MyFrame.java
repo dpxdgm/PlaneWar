@@ -1,31 +1,50 @@
+    
 package com.tjrac.planewar.frame;
 
 import javax.swing.*;
 
+import com.tjrac.planewar.basic.CreateEnemyThread;
+import com.tjrac.planewar.pojo.EnemyPlane;
 import com.tjrac.planewar.pojo.Hero;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MyFrame extends JFrame{
-	private MyButton startbtn=null;
-	private MyButton exitbtn=null;
-	private MyButton helpbtn=null;
-	private MyButton returnbtn=null;
-	private JLabel helpJLabel=null;
-	private JLabel titleJLabel=null;
+	static MyFrame myFrame = new MyFrame();
 	
-//	定义角色
-	private static Hero hero=new Hero();
-//   画背景
+	private static MyButton startbtn=null;
+	private static MyButton exitbtn=null;
+	private static MyButton helpbtn=null;
+	private static MyButton returnbtn=null;
+	private static JLabel helpJLabel=null;
+	private static JLabel titleJLabel=null;
+	
+//	                      1开始时
+	public static int gameState=0;
+	private static MyPanel myPanel=new MyPanel();;
+//	创建英雄
+	private static Hero hero=new Hero(myFrame);
+//	创建敌机
+	public static List<EnemyPlane> enemylist=new LinkedList<>();
+	private static EnemyPlane ePlane=new EnemyPlane(100,20,myFrame);;
+	
+//   加载图片
 	private static Image image = Toolkit.getDefaultToolkit().getImage("resource/bg1.jpg");
 	private static final JComponent canvas = new JComponent() {
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			Graphics gg = g.create(); //创建画笔
-			gg.drawImage(image, 0, 0, getWidth(), getHeight(), this); //画图
+			Graphics gg = g.create();
+			gg.drawImage(image, 0, 0, getWidth(), getHeight(), this);
 			gg.dispose(); 
 		}
 	};
@@ -35,11 +54,28 @@ public class MyFrame extends JFrame{
 		setResizable(false);
 		setLayout(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+	public static void main(String[] args) {
+		Thread starThread=new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while(true) {
+					System.out.println("进入线程");
+					if (gameState==1) {
+						myFrame.getContentPane().removeAll();
+						myFrame.setContentPane(myPanel);
+						myPanel.startEnemyThread();
+						System.out.println("开始游戏");
+						break;
+					}
+				}
+			}
+		});
+		starThread.start();
 		
-		Container c=getContentPane();
+		Container c=myFrame.getContentPane();
 		canvas.setBounds(0,0,400,700);
-		initializationAll(this);
-		c.add(hero);
+		initializationAll(myFrame);
 		c.add(returnbtn);
 		c.add(helpJLabel);
 		c.add(startbtn);
@@ -47,14 +83,11 @@ public class MyFrame extends JFrame{
 		c.add(helpbtn);
 		c.add(titleJLabel);
 		c.add(canvas);
-		setVisible(true);
-	}
-	public static void main(String[] args) {
-		new MyFrame();
+		myFrame.setVisible(true);
 	}
 	
-	private void initializationAll(MyFrame frame) {
-//		初始化按钮
+	private static void initializationAll(MyFrame frame) {
+//		初始化
 		startbtn=new MyButton("开始游戏");
 		startbtn.setBounds(120, 300, 160, 40);
 		startbtn.addActionListener(new ActionListener() {
@@ -65,7 +98,8 @@ public class MyFrame extends JFrame{
 				helpbtn.setVisible(false);
 				titleJLabel.setVisible(false);
 				image=Toolkit.getDefaultToolkit().getImage("resource/bg.jpg");
-				frame.setContentPane(new MyPanel());
+				gameState=1;
+				System.out.println("gameState状态:"+gameState);
 			}
 		});
 		exitbtn=new MyButton("退出游戏");
@@ -109,31 +143,55 @@ public class MyFrame extends JFrame{
 		titleJLabel.setOpaque(false);
 		titleJLabel.setForeground(Color.white);
 		
-		helpJLabel=new JLabel("<html><body>玩家通过键盘的上下左右键，控制<br>玩家飞机上下左右，按住空格<br>键进行发射子弹<body></html>",JLabel.CENTER);
+		helpJLabel=new JLabel("<html><body>玩家通过键盘的上下左右键，控制<br>玩家飞机上下左右，按住空格<br>键进行发射子弹body></html>",JLabel.CENTER);
 		helpJLabel.setBounds(100, 280, 200, 50);
 		helpJLabel.setOpaque(false);
 		helpJLabel.setForeground(Color.white);
 		helpJLabel.setVisible(false);
 	}
 
-	public static class MyPanel extends JPanel{
+	public static class MyPanel extends MyJPanel{
+		public MyPanel() {
+			addKeyListener(myFrame.new KeyMonitor());
+			setFocusable(true);		
+		}
+		public void startEnemyThread(){
+			new CreateEnemyThread(myFrame).start();
+		};
 		@Override
 		protected void paintComponent(Graphics g) {
-			// TODO Auto-generated method stub
 			super.paintComponent(g);
 			drawbackImg(g);
-			drawHeroImage(g);
+		}
+		@Override
+		public void paint(Graphics g) {
+			super.paint(g);
+			hero.draw(g);
+//			ePlane.draw(g);
+			System.out.println(ePlane.y);
+			if (enemylist!=null||enemylist.size()>0) {
+				for (int i = 0; i < enemylist.size(); i++) {
+					EnemyPlane ePlane=enemylist.get(i);
+					ePlane.draw(g);
+				}
+			}
 		}
 		private void drawbackImg(Graphics g) {
 			Graphics2D g2d=(Graphics2D)g.create();
 			g2d.drawImage(image,0,0,400,700,this);
 			g2d.dispose();
 		}
-		private void drawHeroImage(Graphics g) {
-			// TODO Auto-generated method stub
-			Graphics2D g2d=(Graphics2D)g.create();
-			g2d.drawImage(hero.getImage(), hero.getX(),hero.getY(),hero.getWidth(),hero.getHeight(),this);
-			g2d.dispose();
-		}
+	}
+	
+	private class KeyMonitor extends KeyAdapter{  
+	    @Override  
+	    public void keyPressed(KeyEvent e) {  
+	        hero.moveHeroPress(e);
+	    }
+	    @Override  
+	    public void keyReleased(KeyEvent e) {  
+	        hero.moveHeroRelease(e);
+	    }  
+	      
 	}
 }

@@ -21,10 +21,8 @@ public class Bullet extends FlyObject{
 	}
 	
 	}
-	//子弹的速度
     private int speed=3;
-    private BufferedImage[] images; //可切换的图片数组
-    //子弹的构造方法，初始化子弹的位置
+    private BufferedImage[] images;
 	public Bullet(Hero hero){
 	    this.setImage(Bullet.bullet1);
 	    this.setWidth(this.getImage().getWidth());
@@ -39,10 +37,10 @@ public class Bullet extends FlyObject{
 	    this.setImage(Bullet.bullet1);
 	}
 
-	@Override
-	public void movetheobject() {
-		this.setY(getY()-speed);	
-	}
+//	@Override
+//	public void movetheobject() {
+//		this.setY(getY()-speed);	
+//	}
 
 	@Override
 	public boolean moveOut() {

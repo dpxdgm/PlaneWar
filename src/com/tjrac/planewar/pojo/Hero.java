@@ -1,26 +1,32 @@
 package com.tjrac.planewar.pojo;
 
+import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
 import javax.imageio.ImageIO;
+
+import com.tjrac.planewar.basic.Direction;
 import com.tjrac.planewar.father.FlyObject;
 import com.tjrac.planewar.frame.MyFrame;
 
 public class Hero extends FlyObject{
 	
-	private int doubleFire; //火力值
-	private int life; //命
-	private BufferedImage[] images; //可切换的图片数组
-	private int index; //协助图片切换
+	private int doubleFire;
+	private int life;
+	private BufferedImage[] images;
+	private int index;
+
+	private Direction dir = Direction.STOP;
+	private boolean bL,bU,bR,bD;
+	private int speed=10;
 	
-	
-	//构造方法
-	public Hero(){
-		
+	private MyFrame gf;
+	public Hero(MyFrame myFrame){
 		try {
 			image=ImageIO.read(MyFrame.class.getResource("../resource/plane15.png"));
 		} catch (IOException e) {
@@ -29,9 +35,9 @@ public class Hero extends FlyObject{
 		}
 		width=50;
 		height=50;
-		doubleFire = 100; //默认为0(单倍火力)
-		life = 3; //默认3条命
-		index=0; //协助图片切换
+		doubleFire = 100;
+		life = 3;
+		index=0;
 		this.setX(200-this.getWidth()/2);
         this.setY(700-this.getHeight()*2);
 	}
@@ -57,7 +63,6 @@ public class Hero extends FlyObject{
     public int getLife(){
         return life;
     }
-    //发射子弹
     public Bullet[] shoot(){
         int xStep=getWidth()/4;
         int yStep=20;
@@ -78,24 +83,111 @@ public class Hero extends FlyObject{
             return bullets;
         }
     }
-   //当前物体移动一下，相对距离，x,y鼠标位置
-//    public void  moveTo(int x,int y){
-//        this.setX(x-Hero.Hero1.getWidth()/2);
-//        this.setY(y-Hero.Hero1.getHeight()/2);
-//    }
-    //飞机移动
-	@Override
-	public void movetheobject() {
-		if(images.length>0){
-            this.setImage(images[index++/10%images.length]);
-        }
+    public void moveHeroPress(KeyEvent e) {
+    	int key = e.getKeyCode();  
+	    switch(key) {  
+	    case KeyEvent.VK_LEFT :  
+	        bL = true;  
+	        break;  
+	    case KeyEvent.VK_UP :  
+	        bU = true;  
+	        break;  
+	    case KeyEvent.VK_RIGHT :  
+	        bR = true;  
+	        break;  
+	    case KeyEvent.VK_DOWN :  
+	        bD = true;  
+	        break;  
+	    } 
+	    locateDirection();
 	}
-	//检查是否出界
+    void locateDirection() { 
+	    if(bL && !bU && !bR && !bD) dir = Direction.L;  
+	    else if(bL && bU && !bR && !bD) dir = Direction.LU;  
+	    else if(!bL && bU && !bR && !bD) dir = Direction.U;  
+	    else if(!bL && bU && bR && !bD) dir = Direction.RU;  
+	    else if(!bL && !bU && bR && !bD) dir = Direction.R;  
+	    else if(!bL && !bU && bR && bD) dir = Direction.RD;  
+	    else if(!bL && !bU && !bR && bD) dir = Direction.D;  
+	    else if(bL && !bU && !bR && bD) dir = Direction.LD;  
+	    else if(!bL && !bU && !bR && !bD) dir = Direction.STOP;  
+	}
+
+	public void moveHeroRelease(KeyEvent e) {
+		int key = e.getKeyCode();  
+	    switch(key) {  
+	    case KeyEvent.VK_SPACE:  
+	    case KeyEvent.VK_CONTROL:  
+	    	fire();
+	        break;  
+	    case KeyEvent.VK_LEFT :  
+	        bL = false;  
+	        break;  
+	    case KeyEvent.VK_UP :  
+	        bU = false;  
+	        break;  
+	    case KeyEvent.VK_RIGHT :  
+	        bR = false;  
+	        break;  
+	    case KeyEvent.VK_DOWN :  
+	        bD = false;  
+	        break;  
+	    }
+	    locateDirection();
+	}
+	public void draw(Graphics g){
+		g.drawImage(this.image, this.x, this.y,this.getWidth(),this.getHeight(), null);
+		move(); 
+	}
+	
+	private void move() {
+		switch(dir) {  
+	    case L:  
+	        x -= speed;  
+	        break;  
+	    case LU:  
+	        x -= speed;  
+	        y -= speed;  
+	        break;  
+	    case U:  
+	        y -= speed;  
+	        break;  
+	    case RU:  
+	        x += speed;  
+	        y -= speed;  
+	        break;  
+	    case R:  
+	        x += speed;  
+	        break;  
+	    case RD:  
+	        x += speed;  
+	        y += speed;  
+	        break;  
+	    case D:  
+	        y += speed;  
+	        break;  
+	    case LD:  
+	        x -= speed;  
+	        y += speed;  
+	        break;  
+	    case STOP:  
+	        break;  
+	    }
+		if(x < 0) x = 0;  
+    	if(y < 0) y = 0;  
+    	if(x + width > 400) x = 400 - width;  
+    	if(y + height > 700) y = 700 - height;
+		
+	}
+
+	private void fire() {
+		
+	}
+
 	@Override
 	public boolean moveOut() {
 		return false;
 	}
-	//碰撞算法
     public boolean hit(FlyObject object){
         int x1=object.getX()-this.getWidth()/2;
         int x2=object.getX()+this.getWidth()/2+object.getWidth();
@@ -105,11 +197,5 @@ public class Hero extends FlyObject{
         int heroy=this.getY()+this.getHeight()/2;
         return herox>x1&&herox<x2&&heroy>y1&&heroy<y2;
     }
-
-	@Override
-	public String toString() {
-		return "Hero [doubleFire=" + doubleFire + ", life=" + life + ", images=" + Arrays.toString(images) + ", index="
-				+ index + "]";
-	}
 
 }
