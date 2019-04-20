@@ -13,7 +13,6 @@ import java.awt.event.MouseListener;
 import javax.swing.JButton;
 import javax.swing.border.Border;
 
-import javafx.scene.layout.BorderPane;
 
 public class MyButton extends JButton{
 	public MyButton(String name) {

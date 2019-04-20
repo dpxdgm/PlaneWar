@@ -28,6 +28,8 @@ public class Hero extends FlyObject{
 	
 	private CreateBulletThread cBulletThread=null;
 	private MyFrame myFrame;
+	////////
+	public boolean isfire = false;
 	public Hero(MyFrame myFrame){
 		this.myFrame=myFrame;
 		try {
@@ -44,6 +46,7 @@ public class Hero extends FlyObject{
 		this.setX(200-this.getWidth()/2);
         this.setY(700-this.getHeight()*2);
         cBulletThread=new CreateBulletThread(myFrame);
+		cBulletThread.start();
 	}
 	
     public int getFire(){
@@ -185,7 +188,15 @@ public class Hero extends FlyObject{
 	}
 
 	private void fire() {
-		cBulletThread.start();
+
+		if(this.isfire==true)
+		{
+			this.isfire=false;
+		}
+		else
+		{
+			this.isfire=true;
+		}
 	}
 
 	@Override
