@@ -3,7 +3,9 @@ package com.tjrac.planewar.frame;
 
 import javax.swing.*;
 
+import com.tjrac.planewar.basic.CreateBulletThread;
 import com.tjrac.planewar.basic.CreateEnemyThread;
+import com.tjrac.planewar.pojo.Bullet;
 import com.tjrac.planewar.pojo.EnemyPlane;
 import com.tjrac.planewar.pojo.Hero;
 
@@ -33,10 +35,13 @@ public class MyFrame extends JFrame{
 	public static int gameState=0;
 	private static MyPanel myPanel=new MyPanel();;
 //	创建英雄
-	private static Hero hero=new Hero(myFrame);
+	public static Hero hero=new Hero(myFrame);
 //	创建敌机
 	public static List<EnemyPlane> enemylist=new LinkedList<>();
 	private static EnemyPlane ePlane=new EnemyPlane(100,20,myFrame);;
+	//////////////////////
+	public static List<Bullet> bulletlist=new LinkedList<>();
+	//private static Bullet bullet=new Bullet(myFrame);;
 	
 //   加载图片
 	private static Image image = Toolkit.getDefaultToolkit().getImage("resource/bg1.jpg");
@@ -167,12 +172,19 @@ public class MyFrame extends JFrame{
 		public void paint(Graphics g) {
 			super.paint(g);
 			hero.draw(g);
-//			ePlane.draw(g);
-			System.out.println(ePlane.y);
 			if (enemylist!=null||enemylist.size()>0) {
 				for (int i = 0; i < enemylist.size(); i++) {
 					EnemyPlane ePlane=enemylist.get(i);
 					ePlane.draw(g);
+				}
+			}
+			
+			///////////在每次重画时添加子弹
+			if (bulletlist!=null||bulletlist.size()>0) {
+				for (int i = 0; i < bulletlist.size(); i++) {
+					Bullet bullet=bulletlist.get(i);
+					//bullet.draw(g,hero.getX(),hero.getY());
+					bullet.draw(g);
 				}
 			}
 		}
