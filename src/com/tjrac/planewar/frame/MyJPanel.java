@@ -18,7 +18,7 @@ public class MyJPanel extends JPanel{
 					Thread.sleep(40);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
-				}//ʹCPUЪ��
+				}
 			}
 		}
 	}

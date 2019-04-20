@@ -21,7 +21,8 @@ public class Hero extends FlyObject{
 	private int life;
 	private BufferedImage[] images;
 	private int index;
-
+	
+	public static int myscore=0;
 	private Direction dir = Direction.STOP;
 	private boolean bL,bU,bR,bD;
 	private int speed=10;
@@ -64,7 +65,7 @@ public class Hero extends FlyObject{
     public void addLife(){
         life++;
     }
-    public void subLise(){
+    public void delLife(){
         life--;
     }
     public int getLife(){
@@ -143,6 +144,10 @@ public class Hero extends FlyObject{
 	    locateDirection();
 	}
 	public void draw(Graphics g){
+		if (life==0||life<0) {
+			myFrame.gameState=2;
+			return;
+		}
 		g.drawImage(this.image, this.x, this.y,this.getWidth(),this.getHeight(), null);
 		move(); 
 	}
@@ -198,19 +203,5 @@ public class Hero extends FlyObject{
 			this.isfire=true;
 		}
 	}
-
-	@Override
-	public boolean moveOut() {
-		return false;
-	}
-    public boolean hit(FlyObject object){
-        int x1=object.getX()-this.getWidth()/2;
-        int x2=object.getX()+this.getWidth()/2+object.getWidth();
-        int y1=object.getY()-this.getHeight()/2;
-        int y2=object.getY()+this.getHeight()/2+object.getHeight();
-        int herox=this.getX()+this.getWidth()/2;
-        int heroy=this.getY()+this.getHeight()/2;
-        return herox>x1&&herox<x2&&heroy>y1&&heroy<y2;
-    }
 
 }

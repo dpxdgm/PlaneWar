@@ -39,9 +39,8 @@ public class MyFrame extends JFrame{
 //	创建敌机
 	public static List<EnemyPlane> enemylist=new LinkedList<>();
 	private static EnemyPlane ePlane=new EnemyPlane(100,20,myFrame);;
-	//////////////////////
+	//////////////////////英雄的子弹袋
 	public static List<Bullet> bulletlist=new LinkedList<>();
-	//private static Bullet bullet=new Bullet(myFrame);;
 	
 //   加载图片
 	private static Image image = Toolkit.getDefaultToolkit().getImage("resource/bg1.jpg");
@@ -167,10 +166,12 @@ public class MyFrame extends JFrame{
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			drawbackImg(g);
+			drawHeroLife(g);
 		}
 		@Override
 		public void paint(Graphics g) {
 			super.paint(g);
+			
 			hero.draw(g);
 			if (enemylist!=null||enemylist.size()>0) {
 				for (int i = 0; i < enemylist.size(); i++) {
@@ -183,14 +184,26 @@ public class MyFrame extends JFrame{
 			if (bulletlist!=null||bulletlist.size()>0) {
 				for (int i = 0; i < bulletlist.size(); i++) {
 					Bullet bullet=bulletlist.get(i);
-					//bullet.draw(g,hero.getX(),hero.getY());
 					bullet.draw(g);
+					bullet.hitplanes(enemylist);
 				}
 			}
 		}
 		private void drawbackImg(Graphics g) {
 			Graphics2D g2d=(Graphics2D)g.create();
 			g2d.drawImage(image,0,0,400,700,this);
+			g2d.dispose();
+		}
+		private void drawHeroLife(Graphics g) {
+			Graphics2D g2d=(Graphics2D)g.create();
+			g2d.setColor(Color.white);
+			g2d.setFont(new Font(null, Font.BOLD, 12));
+			g2d.drawString("生命值：", 5, 20);
+			g2d.drawString("分数：", 15, 50);
+			g2d.drawString(""+hero.myscore, 70, 50);
+			for (int i = 0; i <hero.getLife(); i++) {
+				g2d.drawRoundRect(60+i*25, 5, 20, 20, 5, 5);
+			}
 			g2d.dispose();
 		}
 	}

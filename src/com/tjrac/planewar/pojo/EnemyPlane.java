@@ -44,6 +44,13 @@ public class EnemyPlane extends Enemy implements Score{
 		return 5;
 	}
 	
+	
+	public boolean isAlife() {
+		return isAlife;
+	}
+	public void setAlife(boolean isAlife) {
+		this.isAlife = isAlife;
+	}
 	public void draw(Graphics g){
 		if (isAlife==false) {
 			myFrame.enemylist.remove(this);
@@ -54,7 +61,8 @@ public class EnemyPlane extends Enemy implements Score{
 	}
 	@Override
 	public void movetheobject() {
-		y+=speed; 
+		y+=speed;
+		if(x>400+this.width) x=400-this.width; 
     	if(y < 0) y = 0;
     	if(y>700+this.height) isAlife=false;
 	}
