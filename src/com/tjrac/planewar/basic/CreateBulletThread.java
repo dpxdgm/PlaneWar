@@ -23,7 +23,7 @@ public class CreateBulletThread extends Thread{
 			if (myFrame.gameState==1) {
 				if (myFrame.hero.isfire==true) {
 					if (myFrame.bulletlist.size()<10||myFrame.bulletlist==null) {
-						Bullet bullet = new Bullet(myFrame.hero.x,myFrame.hero.y);
+						Bullet bullet = new Bullet(myFrame.hero.x,myFrame.hero.y,false);
 						myFrame.bulletlist.add(bullet);
 					}
 				}

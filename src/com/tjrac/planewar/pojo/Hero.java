@@ -71,26 +71,6 @@ public class Hero extends FlyObject{
     public int getLife(){
         return life;
     }
-    public Bullet[] shoot(){
-        int xStep=getWidth()/4;
-        int yStep=20;
-       if(doubleFire==200){
-            Bullet[] bullets=new Bullet[2];
-            bullets[0]=new Bullet(getX()+xStep,getY()-yStep);
-            bullets[1]=new Bullet(getX()+3*xStep,getY()-yStep);
-            return bullets;
-        }else if(doubleFire>=300){
-            Bullet[] bullets=new Bullet[3];
-            bullets[0]=new Bullet(getX()+xStep,getY()-yStep);
-            bullets[1]=new Bullet(getX()+3*xStep,getY()-yStep);
-            bullets[2]=new Bullet(getX()+2*xStep,getY()-yStep);
-            return bullets;
-        }else {
-            Bullet[] bullets=new Bullet[1];
-            bullets[0]=new Bullet(getX()+xStep,getY()-yStep);
-            return bullets;
-        }
-    }
     public void moveHeroPress(KeyEvent e) {
     	int key = e.getKeyCode();  
 	    switch(key) {  
@@ -146,6 +126,7 @@ public class Hero extends FlyObject{
 	public void draw(Graphics g){
 		if (life==0||life<0) {
 			myFrame.gameState=2;
+			MyFrame.explodelist.add(new Explode(this.x, this.y));
 			return;
 		}
 		g.drawImage(this.image, this.x, this.y,this.getWidth(),this.getHeight(), null);

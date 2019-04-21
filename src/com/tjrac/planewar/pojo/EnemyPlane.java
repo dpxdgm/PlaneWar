@@ -3,6 +3,8 @@ package com.tjrac.planewar.pojo;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -17,6 +19,8 @@ public class EnemyPlane extends Enemy implements Score{
 	private int speed=2; //定义飞机速度
 	private boolean isAlife=true;
 
+	private List<Bullet> bulletlist=new LinkedList<>();
+	private CreateEBThread eThred=null;
 	//构造方法
 	public EnemyPlane(int x,int y,MyFrame myFrame){
 		try {
@@ -31,6 +35,7 @@ public class EnemyPlane extends Enemy implements Score{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 		this.myFrame=myFrame;
 		Random rand = new Random(); //随机数对象
 		this.image=Enemys[rand.nextInt(8)];
@@ -38,13 +43,15 @@ public class EnemyPlane extends Enemy implements Score{
 		this.height=50;
 		this.x=x;
 		this.y=y;
+		eThred=new CreateEBThread(this);
+		eThred.start();
 	}
+	
 	//击败一架敌机得分5
 	public int getScore() {
 		return 5;
 	}
-	
-	
+
 	public boolean isAlife() {
 		return isAlife;
 	}
@@ -71,5 +78,40 @@ public class EnemyPlane extends Enemy implements Score{
 		return "EnemyPlane [speed=" + speed + ", isAlife=" + isAlife + "]";
 	}
 	
+	public List<Bullet> getBulletlist() {
+		return bulletlist;
+	}
 
+	public void setBulletlist(List<Bullet> bulletlist) {
+		this.bulletlist = bulletlist;
+	}
+
+	public class CreateEBThread extends Thread{
+		private EnemyPlane ePlane;
+		private Random random=new Random();
+		public CreateEBThread(EnemyPlane ePlane) {
+			this.ePlane=ePlane;
+		}
+		@Override
+		public void run() {
+			while (true) {
+				if (MyFrame.gameState==1) {
+					if (ePlane.isAlife) {
+						if (ePlane.getBulletlist().size()<10||ePlane.getBulletlist()==null) {
+							Bullet bullet = new Bullet(ePlane.x,ePlane.y,true);
+							ePlane.getBulletlist().add(bullet);
+						}
+					}else {
+						break;
+					}
+				}
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+	}
 }

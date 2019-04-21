@@ -17,23 +17,35 @@ public class Bullet extends FlyObject{
 
     private static MyFrame myFrame;
     private boolean isAlife=true;
-	public Bullet(int x,int y){
-		////
-	    //System.out.println("ok");
-	    try {
-			this.image=ImageIO.read(MyFrame.class.getResource("../resource/m8.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+    private boolean isEnemy=false;
+	public Bullet(int x,int y,boolean isEnemy){
+		if (!isEnemy) {
+			try {
+				this.image=ImageIO.read(MyFrame.class.getResource("../resource/m8.png"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			this.setWidth(20);
+		    this.setHeight(20);
+		    this.setX(x+15);
+		} else {
+			try {
+				this.image=ImageIO.read(MyFrame.class.getResource("../resource/em7.png"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    this.setWidth(10);
+		    this.setHeight(10);
+		    this.setX(x+20);
 		}
-	    this.setWidth(20);
-	    this.setHeight(20);
-	    this.setX(x+15);
+		this.isEnemy=isEnemy;
 	    this.setY(y);
 	}
 	////////////
 	public void draw(Graphics g){
-		if (isAlife==true) {
+		if (isAlife) {
 			g.drawImage(this.image, this.x, this.y,this.width,this.height, null);
 			movetheobject(); 
 			return;
@@ -44,14 +56,14 @@ public class Bullet extends FlyObject{
 		}
 	}
 	public void movetheobject() {
-		y-=speed; 
-	    //if(y < 0) y = 0;
+		if (!isEnemy) {
+			y-=speed; 
+		} else {
+			y+=speed; 
+		}
 	    if(y<-this.height) isAlife=false;
+	    if(y>700+this.height) isAlife=false;
 	}
-//	@Override
-//	public void movetheobject() {
-//		this.setY(getY()-speed);	
-//	}
 
 	public void hitplanes(List<EnemyPlane> enemylist) {
 		for (EnemyPlane enemyPlane : enemylist) {
@@ -70,12 +82,14 @@ public class Bullet extends FlyObject{
 			Hero hero=(Hero)plane;
 			if (this.isAlife&&getRect().intersects(shape)) {
 				hero.delLife();
+				this.isAlife=false;
 			}
 			break;
 		case 2:
 			EnemyPlane ePlane=(EnemyPlane)plane;
 			if (this.isAlife&&getRect().intersects(shape)) {
 				MyFrame.hero.myscore+=ePlane.getScore();
+				MyFrame.explodelist.add(new Explode(ePlane.x, ePlane.y));
 				ePlane.setAlife(false);
 				this.isAlife=false;
 			}
