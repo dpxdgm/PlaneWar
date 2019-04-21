@@ -7,6 +7,7 @@ import com.tjrac.planewar.basic.CreateBulletThread;
 import com.tjrac.planewar.basic.CreateEnemyThread;
 import com.tjrac.planewar.pojo.Bullet;
 import com.tjrac.planewar.pojo.EnemyPlane;
+import com.tjrac.planewar.pojo.Explode;
 import com.tjrac.planewar.pojo.Hero;
 
 import java.awt.*;
@@ -42,6 +43,8 @@ public class MyFrame extends JFrame{
 	//////////////////////英雄的子弹袋
 	public static List<Bullet> bulletlist=new LinkedList<>();
 	
+//	爆炸对象
+	public static List<Explode> explodelist=new LinkedList<>();
 //   加载图片
 	private static Image image = Toolkit.getDefaultToolkit().getImage("resource/bg1.jpg");
 	private static final JComponent canvas = new JComponent() {
@@ -186,6 +189,12 @@ public class MyFrame extends JFrame{
 					Bullet bullet=bulletlist.get(i);
 					bullet.draw(g);
 					bullet.hitplanes(enemylist);
+				}
+			}
+			if (explodelist!=null||explodelist.size()>0) {
+				for (int i = 0; i < explodelist.size(); i++) {
+					Explode explode=explodelist.get(i);
+					explode.draw(g);
 				}
 			}
 		}

@@ -76,6 +76,7 @@ public class Bullet extends FlyObject{
 			EnemyPlane ePlane=(EnemyPlane)plane;
 			if (this.isAlife&&getRect().intersects(shape)) {
 				MyFrame.hero.myscore+=ePlane.getScore();
+				MyFrame.explodelist.add(new Explode(ePlane.x, ePlane.y));
 				ePlane.setAlife(false);
 				this.isAlife=false;
 			}
