@@ -174,30 +174,45 @@ public class MyFrame extends JFrame{
 		@Override
 		public void paint(Graphics g) {
 			super.paint(g);
-			
-			hero.draw(g);
-			if (enemylist!=null||enemylist.size()>0) {
-				for (int i = 0; i < enemylist.size(); i++) {
-					EnemyPlane ePlane=enemylist.get(i);
-					ePlane.draw(g);
+			if (hero.getLife()==0||hero.getLife()<0) {
+				drawEnding(g);
+			}else {
+				hero.draw(g);
+				if (enemylist!=null||enemylist.size()>0) {
+					for (int i = 0; i < enemylist.size(); i++) {
+						EnemyPlane ePlane=enemylist.get(i);
+						ePlane.draw(g);
+						try {
+							List<Bullet> ebs = ePlane.getBulletlist();
+							if (ebs!=null||ebs.size()>0) {
+								for (Bullet bullet : ebs) {
+									bullet.draw(g);
+									bullet.hitplane(hero,1);
+								}
+							}
+						} catch (Exception e) {
+							// TODO: handle exception
+						}
+					}
 				}
-			}
-			
-			///////////在每次重画时添加子弹
-			if (bulletlist!=null||bulletlist.size()>0) {
-				for (int i = 0; i < bulletlist.size(); i++) {
-					Bullet bullet=bulletlist.get(i);
-					bullet.draw(g);
-					bullet.hitplanes(enemylist);
+				
+				///////////在每次重画时添加子弹
+				if (bulletlist!=null||bulletlist.size()>0) {
+					for (int i = 0; i < bulletlist.size(); i++) {
+						Bullet bullet=bulletlist.get(i);
+						bullet.draw(g);
+						bullet.hitplanes(enemylist);
+					}
 				}
-			}
-			if (explodelist!=null||explodelist.size()>0) {
-				for (int i = 0; i < explodelist.size(); i++) {
-					Explode explode=explodelist.get(i);
-					explode.draw(g);
+				if (explodelist!=null||explodelist.size()>0) {
+					for (int i = 0; i < explodelist.size(); i++) {
+						Explode explode=explodelist.get(i);
+						explode.draw(g);
+					}
 				}
 			}
 		}
+		
 		private void drawbackImg(Graphics g) {
 			Graphics2D g2d=(Graphics2D)g.create();
 			g2d.drawImage(image,0,0,400,700,this);
@@ -205,6 +220,7 @@ public class MyFrame extends JFrame{
 		}
 		private void drawHeroLife(Graphics g) {
 			Graphics2D g2d=(Graphics2D)g.create();
+			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2d.setColor(Color.white);
 			g2d.setFont(new Font(null, Font.BOLD, 12));
 			g2d.drawString("生命值：", 5, 20);
@@ -213,6 +229,18 @@ public class MyFrame extends JFrame{
 			for (int i = 0; i <hero.getLife(); i++) {
 				g2d.drawRoundRect(60+i*25, 5, 20, 20, 5, 5);
 			}
+			g2d.dispose();
+		}
+		private void drawEnding(Graphics g) {
+			Graphics2D g2d=(Graphics2D)g.create();
+			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2d.setColor(Color.white);
+			Font font = new Font(null, Font.BOLD, 35);
+			g2d.setFont(font);
+			FontMetrics fm=g2d.getFontMetrics(font);
+			int stringwidth=fm.stringWidth("GAME OVER");
+			int widthx=(400-stringwidth)/2;
+			g2d.drawString("GAME OVER", widthx, 300);
 			g2d.dispose();
 		}
 	}

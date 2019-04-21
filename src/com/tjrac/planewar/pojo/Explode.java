@@ -40,6 +40,7 @@ public class Explode extends FlyObject{
 				this.isAlife=false;
 				MyFrame.explodelist.remove(this);
 			}
+			return;
 		}else {
 			return;
 		}
