@@ -18,7 +18,8 @@ public class EnemyPlane extends Enemy implements Score{
 	public static BufferedImage Enemys[]=new BufferedImage[8];
 	private int speed=2; //定义飞机速度
 	private boolean isAlife=true;
-
+	private int life=2;
+	
 	private List<Bullet> bulletlist=new LinkedList<>();
 	private CreateEBThread eThred=null;
 	//构造方法
@@ -52,6 +53,9 @@ public class EnemyPlane extends Enemy implements Score{
 		return 5;
 	}
 
+	public void hitLife() {
+		this.life--;
+	}
 	public boolean isAlife() {
 		return isAlife;
 	}
@@ -59,7 +63,9 @@ public class EnemyPlane extends Enemy implements Score{
 		this.isAlife = isAlife;
 	}
 	public void draw(Graphics g){
-		if (isAlife==false) {
+		if (life==0||isAlife==false||life<0) {
+			MyFrame.hero.myscore+=this.getScore();
+			MyFrame.explodelist.add(new Explode(this.x, this.y));
 			myFrame.enemylist.remove(this);
 			return;
 		}

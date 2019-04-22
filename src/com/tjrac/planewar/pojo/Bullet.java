@@ -53,9 +53,9 @@ public class Bullet extends FlyObject{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			this.setWidth(20);
-		    this.setHeight(20);
-		    this.setX(x+15);
+			this.setWidth(10);
+		    this.setHeight(60);
+		    this.setX(x+20);
 		} else {
 			try {
 				this.image=ImageIO.read(MyFrame.class.getResource("../resource/em7.png"));
@@ -116,9 +116,8 @@ public class Bullet extends FlyObject{
 		case 2:
 			EnemyPlane ePlane=(EnemyPlane)plane;
 			if (this.isAlife&&getRect().intersects(shape)) {
-				MyFrame.hero.myscore+=ePlane.getScore();
-				MyFrame.explodelist.add(new Explode(ePlane.x, ePlane.y));
-				ePlane.setAlife(false);
+
+				ePlane.hitLife();
 				this.isAlife=false;
 			}
 			break;

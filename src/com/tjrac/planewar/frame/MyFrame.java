@@ -6,6 +6,7 @@ import javax.swing.*;
 import com.tjrac.planewar.basic.Award;
 import com.tjrac.planewar.basic.CreateBulletThread;
 import com.tjrac.planewar.basic.CreateEnemyThread;
+import com.tjrac.planewar.basic.MyMusicPlay;
 import com.tjrac.planewar.pojo.Bullet;
 import com.tjrac.planewar.pojo.EnemyPlane;
 import com.tjrac.planewar.pojo.Explode;
@@ -63,6 +64,7 @@ public class MyFrame extends JFrame{
 		}
 	};
 	public MyFrame() {
+		
 		setTitle("PlaneWar");
 		setSize(400, 700);
 		setResizable(false);
@@ -81,6 +83,7 @@ public class MyFrame extends JFrame{
 						myPanel.startEnemyThread();
 						starttime=System.currentTimeMillis();
 						System.out.println("开始游戏");
+						MyMusicPlay.playMusic();
 						break;
 					}
 				}
@@ -257,6 +260,8 @@ public class MyFrame extends JFrame{
 			int stringwidth=fm.stringWidth("GAME OVER");
 			int widthx=(400-stringwidth)/2;
 			g2d.drawString("GAME OVER", widthx, 300);
+			g2d.setFont(new Font(null, Font.BOLD, 18));
+			g2d.drawString("你的分数为："+hero.myscore, 130, 340);
 			g2d.dispose();
 		}
 	}
