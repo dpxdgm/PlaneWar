@@ -3,6 +3,7 @@ package com.tjrac.planewar.frame;
 
 import javax.swing.*;
 
+import com.tjrac.planewar.basic.Award;
 import com.tjrac.planewar.basic.CreateBulletThread;
 import com.tjrac.planewar.basic.CreateEnemyThread;
 import com.tjrac.planewar.pojo.Bullet;
@@ -34,6 +35,9 @@ public class MyFrame extends JFrame{
 	
 //	                      1开始时
 	public static int gameState=0;
+//	记录系统时间
+	public static long starttime=0;
+	
 	private static MyPanel myPanel=new MyPanel();;
 //	创建英雄
 	public static Hero hero=new Hero(myFrame);
@@ -45,6 +49,9 @@ public class MyFrame extends JFrame{
 	
 //	爆炸对象
 	public static List<Explode> explodelist=new LinkedList<>();
+	
+//	奖励对象
+	public static List<Award> awardlist=new LinkedList<>();
 //   加载图片
 	private static Image image = Toolkit.getDefaultToolkit().getImage("resource/bg1.jpg");
 	private static final JComponent canvas = new JComponent() {
@@ -72,6 +79,7 @@ public class MyFrame extends JFrame{
 						myFrame.getContentPane().removeAll();
 						myFrame.setContentPane(myPanel);
 						myPanel.startEnemyThread();
+						starttime=System.currentTimeMillis();
 						System.out.println("开始游戏");
 						break;
 					}
@@ -208,6 +216,14 @@ public class MyFrame extends JFrame{
 					for (int i = 0; i < explodelist.size(); i++) {
 						Explode explode=explodelist.get(i);
 						explode.draw(g);
+					}
+				}
+//				奖励
+				if (awardlist!=null||awardlist.size()>0) {
+					for (int i = 0; i < awardlist.size(); i++) {
+						Award award=awardlist.get(i);
+						award.draw(g);
+						award.awardHero(hero);
 					}
 				}
 			}

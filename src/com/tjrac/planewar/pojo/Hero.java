@@ -29,6 +29,10 @@ public class Hero extends FlyObject{
 	
 	private CreateBulletThread cBulletThread=null;
 	private MyFrame myFrame;
+	private int mybullettype=0;
+	
+	
+
 	////////
 	public boolean isfire = false;
 	public Hero(MyFrame myFrame){
@@ -58,9 +62,6 @@ public class Hero extends FlyObject{
         this.doubleFire = fire;
     }
 
-    public void addFire(){
-    	doubleFire+=100;
-    }
 
     public void addLife(){
         life++;
@@ -185,4 +186,11 @@ public class Hero extends FlyObject{
 		}
 	}
 
+	public int getMybullettype() {
+		return mybullettype;
+	}
+
+	public void setMybullettype(int mybullettype) {
+		this.mybullettype = mybullettype;
+	}
 }

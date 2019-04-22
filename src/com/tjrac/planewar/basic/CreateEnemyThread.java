@@ -19,6 +19,10 @@ public class CreateEnemyThread extends Thread{
 					EnemyPlane enemyPlane = new EnemyPlane(random.nextInt(300),-random.nextInt(150),myFrame);
 					myFrame.enemylist.add(enemyPlane);
 				}
+				System.out.println("游戏运行时间:"+(System.currentTimeMillis()-myFrame.starttime)/1000);
+				if ((System.currentTimeMillis()-myFrame.starttime)/1000>15&&(System.currentTimeMillis()-myFrame.starttime)/1000%10==0) {
+					myFrame.awardlist.add(new Award());
+				}
 			}
 			try {
 				Thread.sleep(1000);

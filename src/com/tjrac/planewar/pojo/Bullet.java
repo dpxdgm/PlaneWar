@@ -43,6 +43,33 @@ public class Bullet extends FlyObject{
 		this.isEnemy=isEnemy;
 	    this.setY(y);
 	}
+	
+//	改变外形构造方法
+	public Bullet(int x, int y, boolean isEnemy, int i) {
+		if (!isEnemy) {
+			try {
+				this.image=ImageIO.read(MyFrame.class.getResource("../resource/m11.png"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			this.setWidth(20);
+		    this.setHeight(20);
+		    this.setX(x+15);
+		} else {
+			try {
+				this.image=ImageIO.read(MyFrame.class.getResource("../resource/em7.png"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    this.setWidth(10);
+		    this.setHeight(10);
+		    this.setX(x+20);
+		}
+		this.isEnemy=isEnemy;
+	    this.setY(y);
+	}
 	////////////
 	public void draw(Graphics g){
 		if (isAlife) {
@@ -66,7 +93,8 @@ public class Bullet extends FlyObject{
 	}
 
 	public void hitplanes(List<EnemyPlane> enemylist) {
-		for (EnemyPlane enemyPlane : enemylist) {
+		for (int i = 0; i < enemylist.size(); i++) {
+			EnemyPlane enemyPlane=enemylist.get(i);
 			hitplane(enemyPlane,2);
 		}
 	}

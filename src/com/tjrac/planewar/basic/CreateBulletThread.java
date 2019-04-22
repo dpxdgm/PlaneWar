@@ -22,10 +22,18 @@ public class CreateBulletThread extends Thread{
 		while (true) {
 			if (myFrame.gameState==1) {
 				if (myFrame.hero.isfire==true) {
-					if (myFrame.bulletlist.size()<10||myFrame.bulletlist==null) {
-						Bullet bullet = new Bullet(myFrame.hero.x,myFrame.hero.y,false);
-						myFrame.bulletlist.add(bullet);
+					if (myFrame.hero.getMybullettype()==0) {
+						if (myFrame.bulletlist.size()<10||myFrame.bulletlist==null) {
+							Bullet bullet = new Bullet(myFrame.hero.x,myFrame.hero.y,false);
+							myFrame.bulletlist.add(bullet);
+						}
+					}else {
+						if (myFrame.bulletlist.size()<10||myFrame.bulletlist==null) {
+							Bullet bullet = new Bullet(myFrame.hero.x,myFrame.hero.y,false,1);
+							myFrame.bulletlist.add(bullet);
+						}
 					}
+					
 				}
 				
 				
